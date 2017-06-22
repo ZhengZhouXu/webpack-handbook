@@ -31,3 +31,11 @@ const config = {
   }
 }
 ```
+### output
+val: object
+> 值为一个对象，这个对象又有很多属性
+> crossOriginLoading 是否启用跨域（我猜应该是打包的js是否启用跨域）
+
+### target
+val: string  
+> 指定运行环境，默认是 'web'，也可以指定 'node'，还有其他环境（用不太到）。
