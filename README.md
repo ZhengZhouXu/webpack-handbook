@@ -1,3 +1,5 @@
+## 属性
+
 ### entry
 * 单文件打包
 ```js
@@ -62,6 +64,46 @@ output: {
 [id] 被 chunk 的 id 替换。  
 [hash] 被 compilation 生命周期的 hash 替换。（最后一个 hash 存储在记录中）  
 默认值："[id].[hash].hot-update.js"
+val: object
+> 值为一个对象，这个对象又有很多属性
+> crossOriginLoading 是否启用跨域（我猜应该是打包的js是否启用跨域）
+* jsonpFunction 异步加载的JSONP函数
+* library 指定library名称，（发布包的时候可能会用到）
+* libraryTarget 打包格式（写库的时候打包很有用）
+```js
+// 假设说我要打包一个jqeury的包
+output: {
+  // ...
+  libraryTarget: 'var',
+  library: 'jquery'
+}
+```
+* path 输出的目录路径
+* publicPath 告诉配置啊，插件啊，最终css，js写入html的路径就是publicPath的路径
+* sourceMapFilename sourceMap文件名（可以使用占位符，很少会特意去配置它吧）
+
+### module加载器
+val: Array  
+有一个module对象，对象里有个rules数组，数组又由对象构成，对象有一个属性test存放转换的文件，use指定loader，越后面的loader，越先被调用。  
+解析css的时候必须要有style-loader，不然不能写入html的style中  
+```js
+module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          { loader: 'style-loader'},
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true
+            }
+          }
+        ]
+      }
+    ]
+  }
+```
 
 ### target
 val: string  
@@ -82,3 +124,19 @@ val: string
 总结：理论上比 require([], function) 更好的掌控chunk打包（花样比较多），但是比 require([], function) 用起来麻烦。（我vue的异步组件还是使用 require([], function) 比较方便）
 ### require([], function)
 分模块加载，采用amd规范
+### devtool
+val: string
+> 指定生成sourceMap的格式（大概7种，搜一下就行了）
+
+## 其他
+### 命令行参数
+* webpack 执行一次开发时的编译
+* webpack -p 执行一次生成环境的编译（压缩）
+* webpack --watch 在开发时持续监控增量编译（很快）
+* webpack -d 让他生成SourceMaps
+* webpack --progress 显示编译进度
+* webpack --colors 显示静态资源的颜色
+* webpack --sort-modules-by, --sort-chunks-by,--sort-assets-by 将modules/chunks/assets进行列表排序
+* webpack --display-chunks 展示编译后的分块
+* webpack --display-reasons 显示更多引用模块原因
+* webapck --display-error-details 显示更多报错信息
